@@ -66,6 +66,7 @@ Summary of actions:
 Your feature branch will be merged and you’re taken back to your develop branch. Internally, git-flow used `git merge --no-ff feature/hello-world` to make sure you don’t lose any historical information about your feature branch before it is removed.
 
 ### Release workflow
+If you need tagged and versioned releases, you can use git-flow’s release branches to start a new branch when you’re ready to deploy a new version to production.
 To start a release process, run the following commands :
 
     $ git flow release start 1.0.1
@@ -82,7 +83,8 @@ To start a release process, run the following commands :
     
          git flow release finish '1.0.1'
 
-Create a commit on the release branch to update the `CHANGELOG.md`
+Bump the version number and do everything that’s required to release your project in the release branch.
+Create a commit on the release branch to update the `CHANGELOG.md`.
 Once the QA validation is done, then run the following commands :
 
 
@@ -98,10 +100,12 @@ Once the QA validation is done, then run the following commands :
     
     Summary of actions:
     - Latest objects have been fetched from 'origin'
-    - Release branch has been merged into 'master'
-    - The release was tagged '1.0.1'
-    - Release branch has been back-merged into 'develop'
-    - Release branch 'release/1.0.1' has been deleted
+    - Release branch 'release/1.0.1' has been merged into 'master'
+    - The release was tagged '1.0.1-20191011162841'
+    - Release tag '1.0.1-20191011162841' has been back-merged into 'develop'
+    - Release branch 'release/1.0.1' has been locally deleted; it has been remotely deleted from 'origin'
+    - 'develop', 'master' and tags have been pushed to 'origin'
+    - You are now on branch 'develop'
 
 A CI build should be triggered on the tag creation. See [using tags on Jenkins Pipeline](https://jenkins.io/blog/2018/05/16/pipelines-with-git-tags/).
 The artifacts generated should use `./version.sh` version.
@@ -114,22 +118,24 @@ For example, if your assets aren’t loading on production, you’d roll back yo
 
     $ git flow hotfix start assets
     Switched to a new branch 'hotfix/assets'
-
-Summary of actions:
-- A new branch 'hotfix/assets' was created, based on 'master'
-- You are now on branch 'hotfix/assets'
-
-Follow-up actions:
-- Bump the version number now!
-- Start committing your hot fixes
-- When done, run:
-
-
-    git flow hotfix finish 'assets'
+    Summary of actions:
+    - A new branch 'hotfix/assets' was created, based on 'master'
+    - You are now on branch 'hotfix/assets'
     
-Hotfix branches are a lot like release branches, except they’re based on master instead of develop. You’re automatically switched to the new hotfix branch so you can start fixing the issue and bumping the minor version number. When you’re done, hotfix finish:
+    Follow-up actions:
+    - Bump the version number now!
+    - Start committing your hot fixes
+    - When done, run:
+        git flow hotfix finish assets
 
-    $ git flow hotfix finish assets
+
+Hotfix branches are a lot like release branches, except they’re based on master instead of develop.
+You’re automatically switched to the new hotfix branch so you can start fixing the issue and bumping the minor version number. 
+When you’re done, hotfix finish:
+
+    $ VERSION=1.0.1
+    $ TAG=${VERSION}-$(date +%Y%m%d%H%M%S)
+    $ git flow hotfix finish assets -F -T "$TAG" -m "Hotfix ${VERSION}"
     Switched to branch 'master'
     Merge made by the 'recursive' strategy.
      assets.txt | 1 +
@@ -145,7 +151,7 @@ Hotfix branches are a lot like release branches, except they’re based on maste
     Summary of actions:
     - Latest objects have been fetched from 'origin'
     - Hotfix branch has been merged into 'master'
-    - The hotfix was tagged '0.1.1'
+    - The hotfix was tagged '1.0.2'
     - Hotfix branch has been back-merged into 'develop'
     - Hotfix branch 'hotfix/assets' has been deleted
 

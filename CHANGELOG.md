@@ -22,6 +22,8 @@ Types of changes
 * `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+## Fixed
+* Improve `README.md`
 
 ## [1.0.0]
 ### Added
