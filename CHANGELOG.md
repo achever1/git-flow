@@ -22,6 +22,8 @@ Types of changes
 * `Security` in case of vulnerabilities.
 
 ## [Unreleased]
+
+## [1.0.0]
 ### Added
 * Import `./version.sh` script and `Git-branching-model.pdf`
 * Create Readme.md explaining git flow process
